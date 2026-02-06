@@ -94,6 +94,14 @@ This project simulates a **real-world hospital + insurance workflow** using Djan
 - **Version Control**: Git & GitHub
 
 ---
+Output:
+<img width="1890" height="866" alt="image" src="https://github.com/user-attachments/assets/331f6454-47e7-451d-865f-e20a2d26d1bd" />
+
+<img width="1878" height="856" alt="image" src="https://github.com/user-attachments/assets/5b95cc15-146f-4c5f-acdb-e07709ef50a5" />
+
+
+<img width="1860" height="864" alt="image" src="https://github.com/user-attachments/assets/53686461-c0e4-4c31-89cb-7a7c423f8fa4" />
+
 
 ## 📂 Project Structure
 smart-medical-invoice-system/
