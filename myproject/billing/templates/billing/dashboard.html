@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>📊 Billing Analytics Dashboard</h2>
+
+<p><strong>Total Revenue:</strong> ₹{{ total_revenue }}</p>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- CHART CONTAINERS -->
+<div style="display: flex; gap: 30px; flex-wrap: wrap;">
+
+    <!-- BAR CHART -->
+    <div style="width: 48%;">
+        <canvas id="costChart"></canvas>
+    </div>
+
+    <!-- PIE CHART -->
+    <div style="width: 48%;">
+        <canvas id="revenueChart"></canvas>
+    </div>
+
+</div>
+
+<hr>
+<div class="result-box">
+    <h3>🏦 Insurance Insight</h3>
+    <p>
+        Claim approval probability is estimated based on diagnosis type,
+        billing deviation, and historical patterns.
+    </p>
+</div>
+
+<h3>🧾 Invoice Records</h3>
+<table>
+   <tr>
+    <th>Patient</th>
+    <th>Age</th>
+    <th>Diagnosis</th>
+    <th>Predicted Cost</th>
+    <th>Total Cost</th>
+    <th>Risk Level</th>
+    <th>Deviation %</th>
+    <th>Cost-Saving Suggestions</th>
+    <th>Insurance Approved</th>
+    <th>Approval Probability</th>
+    <th> Claim Probability</th>
+</tr>
+
+{% for item in invoice_data %}
+<tr>
+    <td>{{ item.invoice.appointment.patient.name }}</td>
+    <td>{{ item.age }}</td>
+    <td>{{ item.invoice.appointment.diagnosis }}</td>
+    <td>₹{{ item.invoice.predicted_cost }}</td>
+    <td>₹{{ item.invoice.total_cost }}</td>
+    <td>{{ item.risk }}</td>
+    <td>{{ item.deviation }}%</td>
+     <td>
+        <ul>
+            {% for s in item.suggestions %}
+                <li>{{ s }}</li>
+            {% endfor %}
+        </ul>
+    </td>
+    <td>₹{{ item.insurance.approved_amount }}</td>
+    <td>₹{{ item.insurance.approved_amount }}</td>
+
+<td>
+    {% if item.insurance.approval_probability >= 80 %}
+        <span style="color:green;font-weight:bold;">
+            {{ item.insurance.approval_probability }}% ✅
+        </span>
+    {% elif item.insurance.approval_probability >= 60 %}
+        <span style="color:orange;font-weight:bold;">
+            {{ item.insurance.approval_probability }}% ⚠️
+        </span>
+    {% else %}
+        <span style="color:red;font-weight:bold;">
+            {{ item.insurance.approval_probability }}% ❌
+        </span>
+    {% endif %}
+</td>
+
+</tr>
+{% endfor %}
+
+</table>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const patientNames = {{ patient_names|safe }};
+    const predictedCosts = {{ predicted_costs|safe }};
+    const actualCosts = {{ actual_costs|safe }};
+
+    // Bar Chart
+    new Chart(document.getElementById("costChart"), {
+        type: "bar",
+        data: {
+            labels: patientNames,
+            datasets: [
+                {
+                    label: "Predicted Cost",
+                    data: predictedCosts,
+                },
+                {
+                    label: "Actual Cost",
+                    data: actualCosts,
+                }
+            ]
+        }
+    });
+
+    // Pie Chart
+    new Chart(document.getElementById("revenueChart"), {
+        type: "pie",
+        data: {
+            labels: patientNames,
+            datasets: [{
+                data: actualCosts
+            }]
+        }
+    });
+</script>
+
+
+{% endblock %}

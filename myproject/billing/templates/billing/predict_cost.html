@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>AI Medical Invoice & Cost Prediction</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Generate Invoice</button>
+</form>
+
+{% if predicted_cost %}
+    <hr>
+    <h3>💰 Predicted Cost: ₹{{ predicted_cost }}</h3>
+    <p><strong>Invoice Summary:</strong> {{ invoice_summary }}</p>
+{% endif %}
+{% endblock %}
